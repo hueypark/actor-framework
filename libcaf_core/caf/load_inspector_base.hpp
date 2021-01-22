@@ -111,7 +111,13 @@ public:
     using setter_result = decltype(set(std::move(tmp)));
     if constexpr (std::is_same<setter_result, bool>::value) {
       if (dref().value(tmp))
-        return set(std::move(tmp));
+        if (set(std::move(tmp))) {
+          return true;
+        } else {
+          this->emplace_error(sec::field_value_synchronization_failed,
+                              "setter returned false");
+          return false;
+        }
       else
         return false;
     } else {
@@ -120,7 +126,7 @@ public:
         if (auto err = set(std::move(tmp)); !err) {
           return true;
         } else {
-          this->emplace_error(std::move(err));
+          this->set_error(std::move(err));
           return false;
         }
       } else {
