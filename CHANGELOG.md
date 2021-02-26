@@ -5,6 +5,17 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [Unreleased]
 
+### Changed
+
+- Setter functions for fields may now return either `bool`, `caf::error` or
+  `void`. Previously, CAF only allowed `bool`.
+
+### Fixed
+
+- Passing a getter and setter pair to an inspector via `apply` produced a
+  compiler error for non-builtin types. The inspection API now recursively
+  inspects user-defined types instead, as was the original intend (#1216).
+
 ## [0.18.0] - 2021-01-25
 
 ### Added
